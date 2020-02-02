@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<button id="clickMe">Load Data</button>
+<div id="results"></div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $("#clickMe").on("click", function(e){
+            console.log(e);
+
+            $.ajax({
+                url: "/views/users/data.php",
+                method: "GET",
+                success: function(data){
+                    console.log(data);
+
+                    parsed_data = JSON.parse(data);
+                    console.log(parsed_data);
+
+                    $.each(parsed_data, function(i, person){
+                        console.log(person);
+                        var output = person.first_name + " " + person.last_name + " is " + person.age + " and lives in " + person.hometown;
+
+                        output += "<br>";
+                        $("#results").append(output);
+
+                    });
+                }
+
+            });
+        });
+    });
+</script>
+</body>
+</html>
