@@ -46,8 +46,13 @@ class Project extends DB {
     */
     public function get_by_id($id) {
         $id = (int)$id; // check to make sure value is an integer by passing it back to itself through the (int).
+        $user_id = (int)$_SESSION["user_logged_in"];
 
-        $sql = "SELECT * FROM projects WHERE id = $id";
+        $sql = "SELECT projects.*, users.username, users.firstname, users.lastname
+                FROM projects
+                LEFT JOIN users
+                ON projects.user_id = users.id 
+                WHERE projects.id = $id";
 
         $project = $this->select($sql)[0]; //bracketed 0 returns first result of the array
 

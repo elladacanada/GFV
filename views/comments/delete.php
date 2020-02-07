@@ -7,4 +7,6 @@ $c_model->delete();
 
 header("Location: /");
 
+
+
 ?>

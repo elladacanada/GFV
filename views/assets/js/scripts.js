@@ -7,6 +7,9 @@ $(document).ready(function(){
 
 
 
+
+
+
      /*
     * 
     * LOGIN/SIGN UP TITLE CHANGE
@@ -120,12 +123,12 @@ $(document).ready(function(){
                         var comment_html = "";
 
                         $.each(comment_data.comments, function(index, comment){
-                            comment_html += "<div class='user-comment ";
+                            comment_html += "<div id='comment-"+comment.id+"' class='user-comment ";
                             comment_html += (comment.user_owns == 'true') ? 'my_comment' : '';
                             comment_html += "'><p>";
                             comment_html += "<span class='font-weight-bold comment-username'>"+comment.username+":</span>";
                             comment_html += comment.comment;
-                            comment_html += (comment.user_owns == 'true') ? "<a href='/comments/delete.php?="+comment.id+"' <i class='fas fa-trash'></i></a>" : '';
+                            comment_html += (comment.user_owns == 'true') ? "<a class='trash-btn' data-target='"+comment.id+"' ><i class='text-danger fas fa-trash'></i></a>" : '';
                             comment_html += "</p></div>";
                         });
 
@@ -141,6 +144,38 @@ $(document).ready(function(){
             );
 
         }
+    });
+
+    /*
+    *
+    * DELETE PROJECT NO REFRESH 
+    * 
+    */
+
+    $("#projectFeed").on("click", ".deleteProjectButton", function(e){
+        e.preventDefault();
+        
+        var this_project = $(this).attr("data-project");
+        var project_id = $("#project-"+this_project);
+        
+        console.log(this_project);
+        $.ajax({
+            url: "/projects/delete.php",
+            data: {
+                id: this_project
+            },
+            success: function(result){
+                console.log(result);
+                if(result){
+                    project_id.fadeOut("3000", function(){
+                        project_id.remove();
+                    });
+                }
+
+
+
+            }
+        });
     });
 
 
@@ -210,15 +245,20 @@ function previewFile() {
     * 
     */
 
-    $("#modalButton").on("click", function(){
+    $(".modal-button").on("click", function(){
     
     
-        $.get( 
-            "/users/show.php", 
-            function(data){
-                $("#exampleModal .modal-body").html(data);
-            });
+       var project_id = $(this).attr("data-project");
+        $.ajax({ 
 
+            url: "/projects/show.php", 
+            data: {
+                id: project_id
+            },
+            success: function(modal_result){
+                $(".modal-dialog").html(modal_result);
+            }
+        });
         
     });
 
@@ -233,7 +273,7 @@ function previewFile() {
     * 
     */
     $("#search_form").on("submit", function(e){
-        // e.preventDefault();
+        e.preventDefault();
     });
 
     $("input#search").on("keyup", function(e){
@@ -275,8 +315,25 @@ function previewFile() {
    
     
 
+    $("#projectFeed").on("click", ".trash-btn", function(e){
+        e.preventDefault();
 
+        var this_comment = $(this).attr("data-target");
+        var comment_box = $(this_comment).find(".comment-box");
+        var comment_id = $("#comment-"+this_comment);
 
+        $.ajax({
+            url: "/comments/delete.php",
+            data: {
+                id: this_comment
+            },
+            success: function (results){
+                comment_id.fadeOut();
+            }
+        });
+        comment_box.remove();
+        
+    });
 
 
     

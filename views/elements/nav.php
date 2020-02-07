@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light  fixed-top">
+<nav class="navbar navbar-expand-lg navbar-light  ">
     <a class="logo" href="/"><img src="/images/gfv-logo.png" alt=""></a>
 
     <?php

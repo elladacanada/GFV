@@ -103,7 +103,7 @@ require_once("elements/nav.php");
                 // print_r($project);
                 ?>
 
-                <div class="card project-post mb-3 rounded-lg">
+                <div id="project-<?=$project["id"];?>" class="card project-post mb-3 rounded-lg">
                   
                   <figure class="figure mb-0 figure-image">
                     <img class="img-fluid w-100 rounded-lg" src="<?=$project["file_url"];?>" alt="">
@@ -114,19 +114,19 @@ require_once("elements/nav.php");
                       if($project["user_id"] == $_SESSION["user_logged_in"]){
                         ?>
                         <span class="float-right">
-                          <a href="/projects/edit.php?id=<?=$project["id"];?>"><i class="fas fa-edit"></i></a>
-                          <a href="/projects/delete.php?id=<?=$project["id"];?>"><i class="fas fa-trash-alt text-danger"></i></a>
+                          <a href="/projects/edit.php?id=<?=$project["id"];?>"><i class="primary fas fa-edit"></i></a>
+                          <a data-project="<?=$project["id"];?>" class="deleteProjectButton"><i class="fas fa-trash-alt text-danger"></i></a>
                         </span>
                         <?php
                       }
                     ?>
-                    <h5><?=$project["title"];?></h5>
+                    <h5><?=ucwords($project["title"]);?></h5>
 
                     <p><small class="text-muted">Posted: <?=date("M, d, Y", strtotime($project["date_uploaded"]));?><br>
-                    User: <a href="/users/index.php?id=<?=$project["user_id"]?>"><?=$project["firstname"]. " " . $project["lastname"];?></a></small></p>
+                    User: <a href="/users/index.php?id=<?=$project["user_id"]?>"><?=ucwords($project["firstname"]). " " . ucwords($project["lastname"]);?></a></small></p>
                   
-                    
-                    <p><strong>Directions:</strong> <?=$project["description"];?></p>
+                    <span><strong>Directions:</strong></span>
+                    <p class="white-space"><?=ucfirst($project["description"]);?></p>
                     
                   </div>
 
@@ -167,12 +167,12 @@ require_once("elements/nav.php");
                           $my_comment = ($user_comment["user_owns"] == "true")?"my_comment":"";
                           $my_comment_trash = ($user_comment["user_owns"] == "true") ? "<i class='fas fa-trash trash-icon'></i>":"";
                       ?>
-                        <div class="user-comment <?=$my_comment?>">
+                        <div id="comment-<?=$user_comment["id"]?>"  class="user-comment <?=$my_comment?>">
                           <p>
                             
-                              <span class="font-weight-bold comment-username"><?=$user_comment["username"]?></span>
-                              <?=$user_comment["comment"]?>
-                              <a class="trash-btn" href="/comments/delete.php?id=<?=$user_comment["id"];?>"><?=$my_comment_trash?></a>
+                              <span class="font-weight-bold comment-username"><?=ucwords($user_comment["username"])?></span>
+                              <?=ucfirst($user_comment["comment"])?>
+                              <a class="trash-btn text-danger" data-target="<?=$user_comment["id"];?>"><?=$my_comment_trash?></a>
                           
                             
                             
@@ -214,28 +214,6 @@ require_once("elements/nav.php");
   
 </div>
 
-<!-- POP UP MODAL -->
-<!-- POP UP MODAL -->
-<!-- POP UP MODAL -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 
